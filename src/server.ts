@@ -11,20 +11,10 @@ class Server {
         this.app = express();
         this.initializeMiddleware();
         this.initializeRoutes();
-        this.initializeDatabase();
     }
 
     private initializeMiddleware() {
         this.app.use(express.json());
-    }
-    private initializeDatabase() {
-        AppDataSource.initialize()
-            .then(() => {
-                console.log("Data Source has been initialized!")
-            })
-            .catch((err) => {
-                console.error("Error during Data Source initialization", err)
-            })
     }
     private initializeRoutes() {
         this.app.get('/', (req, res) => {
@@ -40,6 +30,12 @@ class Server {
 
 }
 
-const server = new Server();
-const PORT = Number(process.env.PORT) || 3000;
-server.start(PORT);
+AppDataSource.initialize()
+    .then(() => {
+        const server = new Server();
+        const PORT = Number(process.env.PORT) || 3000;
+        server.start(PORT);
+    })
+    .catch((err) => {
+        console.error("Error during Data Source initialization", err)
+    })
