@@ -2,7 +2,7 @@ import express, { NextFunction, Request, Response } from 'express';
 import AppDataSource from './database/data-source';
 import 'reflect-metadata';
 import routes from './routes/routes';
-import { errors } from 'celebrate';
+import { errors, isCelebrateError } from 'celebrate';
 import AppError from './errors/error';
 
 
@@ -22,18 +22,31 @@ class Server {
         this.app.use(errors())
         this.app.use((error: Error | AppError, req: Request, res: Response, next: NextFunction) => {
 
-            if (error instanceof AppError){
+            if (isCelebrateError(error)) {
+                return res.status(400).json({
+                    status: 'error',
+                    message: 'Validation failed',
+                    details: Array.from(error.details.entries()).map(([segment, joiError]) => ({
+                        segment,
+                        message: joiError.message,
+                    })),
+                });
+            }
+
+            // Erro de AppError (seu erro customizado)
+            if (error instanceof AppError) {
                 return res.status(error.statusCode).json({
                     status: 'error',
-                    message: error.message
-                })
-            } 
-        
+                    message: error.message,
+                });
+            }
+
+            // Erro interno do servidor (500)
             return res.status(500).json({
                 status: 'error',
-                message: error.message
-            })
-          });
+                message: error.message,
+            });
+        });
 
     }
     private initializeRoutes() {

@@ -17,11 +17,16 @@ export class SummarizeController {
     async index(req: Request, res: Response): Promise<any> {
         
         const summarize = await this.summarizeService.index()
-        res.status(200).json(summarize)
+        return res.status(200).json(summarize)
     }
     async create(req: Request, res: Response): Promise<any> {
-        const { title, content } = req.body// Placeholder for the actual summarization logic
-        this.summarizeService.create({ title, content })
-        res.status(201).json({ message: "Summarization created successfully" })
+        try {
+            const { title, content } = req.body// Placeholder for the actual summarization logic
+            this.summarizeService.create({ title, content })
+            return res.status(201).json({ message: "Summarization created successfully" })
+        } catch (error) {
+            return res.status(error.statusCode).json(error.message)
+        }
+        
     }
 }
