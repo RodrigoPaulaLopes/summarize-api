@@ -4,7 +4,9 @@ import 'reflect-metadata';
 import routes from './routes/routes';
 import { errors, isCelebrateError } from 'celebrate';
 import AppError from './errors/error';
+import dotenv from 'dotenv'
 
+dotenv.config();
 
 class Server {
 
