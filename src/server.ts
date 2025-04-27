@@ -1,6 +1,6 @@
 import express from 'express';
 import AppDataSource from './database/data-source';
-
+import 'reflect-metadata';
 
 
 class Server {
