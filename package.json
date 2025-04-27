@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "start": "ts-node-dev --respawn --transpile-only --ignore-watch node_modules ./src/server.ts",
-    "test": "jest --watchAll=false --detectOpenHandles --forceExit"
+    "test": "jest --watchAll=true --detectOpenHandles --forceExit"
   },
   "dependencies": {
     "celebrate": "^15.0.3",
