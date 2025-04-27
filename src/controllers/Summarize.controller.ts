@@ -3,6 +3,7 @@ import { SummarizeService } from "../services/Summarize.service";
 import { Summarize } from "../entities/Summarize.entity";
 import AppError from "../errors/error";
 import SummarizeRepository from "../repositories/Summarize.repository";
+import ChatGPT from "../api/chatgpt";
 
 
 
@@ -12,29 +13,29 @@ export class SummarizeController {
     private readonly summarizeService: SummarizeService;
 
     constructor() {
-        this.summarizeService = new SummarizeService(SummarizeRepository);
+        this.summarizeService = new SummarizeService(SummarizeRepository, new ChatGPT());
     }
 
 
     async index(req: Request, res: Response): Promise<any> {
 
-        const page = Number(req.query.page) || 1; 
+        const page = Number(req.query.page) || 1;
         const limit = Number(req.query.limit) || 10;
 
         const summarize = await this.summarizeService.index(page, limit)
-        return res.status(200).json({data: summarize, message: ""})
+        return res.status(200).json({ data: summarize, message: "" })
     }
     async create(req: Request, res: Response): Promise<any> {
         const { title, content } = req.body// Placeholder for the actual summarization logic
         const data = await this.summarizeService.create({ title, content })
-        return res.status(201).json({data, message: "Summarization created successfully" })
+        return res.status(201).json({ data, message: "Summarization created successfully" })
     }
 
     async show(req: Request, res: Response): Promise<any> {
         const { id } = req.params
         const summarize = await this.summarizeService.show(id)
 
-        return res.status(200).json({data: summarize, message: `Summarization with id ${id} retrieved successfully` })
+        return res.status(200).json({ data: summarize, message: `Summarization with id ${id} retrieved successfully` })
     }
     async update(req: Request, res: Response): Promise<any> {
         const { id } = req.params
@@ -42,13 +43,13 @@ export class SummarizeController {
 
         const summarize = await this.summarizeService.update(id, { title, content })
 
-        return res.status(200).json({data: summarize, message: `Summarization with id ${id} updated successfully` })
+        return res.status(200).json({ data: summarize, message: `Summarization with id ${id} updated successfully` })
     }
 
     async delete(req: Request, res: Response): Promise<any> {
         const { id } = req.params
         const summarize = await this.summarizeService.delete(id)
 
-        return res.status(200).json({data: summarize, message: `Summarization with id ${id} deleted successfully` })
+        return res.status(200).json({ data: summarize, message: `Summarization with id ${id} deleted successfully` })
     }
 }

@@ -10,9 +10,9 @@ export class SummarizeService {
   private summarizeRepository: Repository<Summarize>;
   private readonly chatgpt: ChatGPT;
 
-  constructor(private readonly repository: Repository<Summarize>) {
+  constructor(private readonly repository: Repository<Summarize>, gpt: ChatGPT) {
     this.summarizeRepository = repository
-    this.chatgpt = new ChatGPT();
+    this.chatgpt = gpt;
   }
 
   public async index(page: number, limit: number): Promise<Pagination> {

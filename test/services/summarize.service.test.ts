@@ -2,6 +2,7 @@ import { Repository } from 'typeorm';
 import { SummarizeService } from '../../src/services/Summarize.service';
 import { Summarize } from '../../src/entities/Summarize.entity';
 import ChatGPT from '../../src/api/chatgpt';
+import AppError from '../../src/errors/error';
 
 describe('SummarizeService', () => {
     let summarizeService: SummarizeService;
@@ -30,6 +31,8 @@ describe('SummarizeService', () => {
             findAndCount: jest.fn(),
             create: jest.fn(),
             save: jest.fn(),
+            update: jest.fn(),
+            delete: jest.fn(),
             findOneBy: jest.fn(),
         } as unknown as jest.Mocked<Repository<Summarize>>;
 
@@ -37,7 +40,8 @@ describe('SummarizeService', () => {
             summarizeAndImprove: jest.fn().mockResolvedValue(response.data[0].content),
         } as unknown as jest.Mocked<ChatGPT>;
 
-        summarizeService = new SummarizeService(summarizeRepository);
+        summarizeService = new SummarizeService(summarizeRepository, chatgpt);
+
     });
 
     it('should create a new summarize', async () => {
@@ -82,14 +86,14 @@ describe('SummarizeService', () => {
     });
 
     it('should throw an error if summarize not found by id', async () => {
-        const summarizeId = "non-existent-id";
-
+        const summarizeId = "72f320d6-c13e-45ee-8479-2ccc25f44d05";
+    
         summarizeRepository.findOneBy.mockResolvedValue(null);
-
-        await expect(summarizeService.show(summarizeId)).rejects.toThrowError(
-            `Summarize with id ${summarizeId} not found`
+    
+        await expect(summarizeService.show(summarizeId)).rejects.toThrow(
+            new AppError("Summarization not found", 404)
         );
-
+    
         expect(summarizeRepository.findOneBy).toHaveBeenCalledWith({ id: summarizeId });
     });
 
