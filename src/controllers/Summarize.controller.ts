@@ -17,7 +17,10 @@ export class SummarizeController {
 
     async index(req: Request, res: Response): Promise<any> {
 
-        const summarize = await this.summarizeService.index()
+        const page = Number(req.query.page) || 1; 
+        const limit = Number(req.query.limit) || 10;
+
+        const summarize = await this.summarizeService.index(page, limit)
         return res.status(200).json({data: summarize, message: ""})
     }
     async create(req: Request, res: Response): Promise<any> {
