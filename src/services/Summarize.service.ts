@@ -3,12 +3,16 @@ import { Summarize } from "../entities/Summarize.entity";
 import SummarizeRepository from "../repositories/Summarize.repository";
 import Pagination from "../types/Pagination";
 import AppError from "../errors/error";
+import ChatGPT from "../api/chatgpt";
+import { CreateSummarize } from "../types/Summarize";
 
 export class SummarizeService {
   private userRepository: Repository<Summarize>;
+  private readonly chatgpt: ChatGPT;
 
   constructor() {
     this.userRepository = SummarizeRepository
+    this.chatgpt = new ChatGPT();
   }
 
   public async index(page: number, limit: number): Promise<Pagination> {
@@ -34,10 +38,16 @@ export class SummarizeService {
 
   }
 
-  public async create(data: any): Promise<Summarize[]> {
+  public async create(data: CreateSummarize): Promise<any> {
+    const response = await this.chatgpt.summarizeAndImprove(data.content)
+
+    if (!response) {
+      throw new AppError("Failed to summarize the text", 400);
+    }
+
+    data.content = response;
     // Placeholder for the actual summarization logic
     const summarize = this.userRepository.create(data);
-
     return await this.userRepository.save(summarize)
   }
 

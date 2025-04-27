@@ -1,5 +1,6 @@
 import OpenAI from "openai";
-import { Chat } from "openai/resources/chat";
+import dotenv from "dotenv";
+dotenv.config();
 
 class ChatGPT {
     private readonly openai: OpenAI;
