@@ -39,13 +39,13 @@ export class SummarizeService {
   }
 
   public async create(data: CreateSummarize): Promise<any> {
-    // const response = await this.chatgpt.summarizeAndImprove(data.content)
+    const response = await this.chatgpt.summarizeAndImprove(data.content)
 
-    // if (!response) {
-    //   throw new AppError("Failed to summarize the text", 400);
-    // }
+    if (!response) {
+      throw new AppError("Failed to summarize the text", 400);
+    }
 
-    // data.content = response;
+    data.content = response;
     // Placeholder for the actual summarization logic
     const summarize = this.summarizeRepository.create(data);
     return await this.summarizeRepository.save(summarize)
@@ -74,7 +74,7 @@ export class SummarizeService {
       throw new AppError("Failed to summarize the text", 400);
     }
     data.content = response;
-    
+
     await this.summarizeRepository.update(id, data);
 
     return await this.summarizeRepository.findOneBy({ id });
