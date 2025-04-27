@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { SummarizeService } from "../services/Summarize.service";
 import { Summarize } from "../entities/Summarize.entity";
 import AppError from "../errors/error";
+import SummarizeRepository from "../repositories/Summarize.repository";
 
 
 
@@ -11,7 +12,7 @@ export class SummarizeController {
     private readonly summarizeService: SummarizeService;
 
     constructor() {
-        this.summarizeService = new SummarizeService();
+        this.summarizeService = new SummarizeService(SummarizeRepository);
     }
 
 
