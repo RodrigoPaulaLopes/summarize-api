@@ -6,5 +6,8 @@ const routes : Router = Router()
 const summarizeController = new SummarizeController()
 
 
-routes.get('/summarize', summarizeController.index)
-routes.post('/summarize', summarizeController.create)
+routes.get('/summarize', (req, res) => summarizeController.index(req, res))
+routes.post('/summarize', (req, res) => summarizeController.create(req, res))
+
+
+export default routes

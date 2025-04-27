@@ -1,6 +1,7 @@
-import express from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import AppDataSource from './database/data-source';
 import 'reflect-metadata';
+import routes from './routes/routes';
 
 
 class Server {
@@ -15,11 +16,16 @@ class Server {
 
     private initializeMiddleware() {
         this.app.use(express.json());
+        this.app.use(express.urlencoded({ extended: true }));
+        this.app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
+
+            res.status((error as any).status || 500).json({
+              message: error.message || 'Internal Server Error',
+            });
+          });
     }
     private initializeRoutes() {
-        this.app.get('/', (req, res) => {
-            res.send('Hello World!');
-        });
+        this.app.use('/api/v1/', routes);
     }
 
     public start(port: number) {
