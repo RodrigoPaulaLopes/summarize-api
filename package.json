@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "start": "ts-node-dev --respawn --transpile-only --ignore-watch node_modules ./src/server.ts",
+    "start": "node dist/server.js",
+    "start:dev": "ts-node-dev --respawn --transpile-only --ignore-watch node_modules ./src/server.ts",
     "test": "jest --watchAll=true --detectOpenHandles --forceExit"
   },
   "dependencies": {
