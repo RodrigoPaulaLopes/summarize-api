@@ -14,26 +14,21 @@ class Server {
         this.app = express();
         this.initializeMiddleware();
         this.initializeRoutes();
+        this.initializeErrorMiddleware();
     }
 
     private initializeMiddleware() {
         this.app.use(express.json());
         this.app.use(express.urlencoded({ extended: true }));
+
+    }
+
+    private initializeErrorMiddleware() {
         this.app.use(errors())
         this.app.use((error: Error | AppError, req: Request, res: Response, next: NextFunction) => {
 
-            if (isCelebrateError(error)) {
-                return res.status(400).json({
-                    status: 'error',
-                    message: 'Validation failed',
-                    details: Array.from(error.details.entries()).map(([segment, joiError]) => ({
-                        segment,
-                        message: joiError.message,
-                    })),
-                });
-            }
 
-            // Erro de AppError (seu erro customizado)
+
             if (error instanceof AppError) {
                 return res.status(error.statusCode).json({
                     status: 'error',
@@ -41,13 +36,11 @@ class Server {
                 });
             }
 
-            // Erro interno do servidor (500)
             return res.status(500).json({
                 status: 'error',
                 message: error.message,
             });
         });
-
     }
     private initializeRoutes() {
         this.app.use('/api/v1/', routes);
