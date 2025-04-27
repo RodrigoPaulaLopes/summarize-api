@@ -4,11 +4,11 @@ import { Summarize } from "../entities/Summarize.entity"
 
 const AppDataSource = new DataSource({
     type: "postgres",
-    host: "localhost",
-    port: 5432,
-    username: "test",
-    password: "test",
-    database: "summarize_db",
+    host: process.env.DB_HOST || "localhost",
+    port: Number(process.env.DB_PORT) || 5432,
+    username: process.env.DB_USERNAME || "test",
+    password: process.env.DB_PASSWORD || "test",
+    database: process.env.DB_NAME || "summarize_db",
     synchronize: false,
     migrations: [CreateSummarizeTable1745721184412],
     entities: [Summarize],
