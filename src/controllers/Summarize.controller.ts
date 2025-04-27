@@ -18,7 +18,7 @@ export class SummarizeController {
     async index(req: Request, res: Response): Promise<any> {
 
         const summarize = await this.summarizeService.index()
-        return res.status(200).json(summarize)
+        return res.status(200).json({data: summarize, message: ""})
     }
     async create(req: Request, res: Response): Promise<any> {
         const { title, content } = req.body// Placeholder for the actual summarization logic
