@@ -1,10 +1,12 @@
 import { Repository } from 'typeorm';
 import { SummarizeService } from '../../src/services/Summarize.service';
 import { Summarize } from '../../src/entities/Summarize.entity';
+import ChatGPT from '../../src/api/chatgpt';
 
 describe('SummarizeService', () => {
     let summarizeService: SummarizeService;
     let summarizeRepository: jest.Mocked<Repository<Summarize>>;
+    let chatgpt: jest.Mocked<ChatGPT>;
     const response = {
         "data": [
             {
@@ -30,6 +32,10 @@ describe('SummarizeService', () => {
             save: jest.fn(),
             findOneBy: jest.fn(),
         } as unknown as jest.Mocked<Repository<Summarize>>;
+
+        chatgpt = {
+            summarizeAndImprove: jest.fn().mockResolvedValue(response.data[0].content),
+        } as unknown as jest.Mocked<ChatGPT>;
 
         summarizeService = new SummarizeService(summarizeRepository);
     });
