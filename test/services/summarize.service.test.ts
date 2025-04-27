@@ -130,7 +130,7 @@ describe('SummarizeService', () => {
         expect(result).toEqual(updatedSummarize);
     });
 
-    /*it('should delete a summarize', async () => {
+    it('should delete a summarize', async () => {
         const summarizeId = "72f320d6-c13e-45ee-8479-2ccc25f44d01";
 
         const existingSummarize = {
@@ -146,6 +146,7 @@ describe('SummarizeService', () => {
         await summarizeService.delete(summarizeId);
 
         expect(summarizeRepository.findOneBy).toHaveBeenCalledWith({ id: summarizeId });
+        expect(summarizeRepository.delete).toHaveBeenCalledWith(summarizeId);
 
-    });*/
+    });
 });
