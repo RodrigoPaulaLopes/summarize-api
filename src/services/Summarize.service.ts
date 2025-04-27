@@ -61,13 +61,20 @@ export class SummarizeService {
     return summarize;
   }
 
-  public async update(id: string, data: any): Promise<Summarize | null> {
+  public async update(id: string, data: CreateSummarize): Promise<Summarize | null> {
     const summarize = await this.userRepository.findOneBy({ id });
 
     if (!summarize) {
       throw new AppError("Summarization not found", 404);
     }
 
+    const response = await this.chatgpt.summarizeAndImprove(data.content)
+
+    if (!response) {
+      throw new AppError("Failed to summarize the text", 400);
+    }
+    data.content = response;
+    
     await this.userRepository.update(id, data);
 
     return await this.userRepository.findOneBy({ id });
