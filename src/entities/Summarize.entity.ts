@@ -5,6 +5,7 @@ export class Summarize {
 
     @PrimaryGeneratedColumn('uuid')
     id: string
+    
     @Column()
     title: string
     @Column()

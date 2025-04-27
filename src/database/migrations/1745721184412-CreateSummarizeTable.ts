@@ -12,6 +12,7 @@ export class CreateSummarizeTable1745721184412 implements MigrationInterface {
                 type: "uuid",
                 isPrimary: true,
                 generationStrategy: "uuid",
+                default: "uuid_generate_v4()",
               },
               {
                 name: "title",

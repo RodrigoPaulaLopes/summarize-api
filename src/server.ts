@@ -2,6 +2,8 @@ import express, { NextFunction, Request, Response } from 'express';
 import AppDataSource from './database/data-source';
 import 'reflect-metadata';
 import routes from './routes/routes';
+import { errors } from 'celebrate';
+import AppError from './errors/error';
 
 
 class Server {
@@ -17,12 +19,22 @@ class Server {
     private initializeMiddleware() {
         this.app.use(express.json());
         this.app.use(express.urlencoded({ extended: true }));
-        this.app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
+        this.app.use(errors())
+        this.app.use((error: Error | AppError, req: Request, res: Response, next: NextFunction) => {
 
-            res.status((error as any).status || 500).json({
-              message: error.message || 'Internal Server Error',
-            });
+            if (error instanceof AppError){
+                return res.status(error.statusCode).json({
+                    status: 'error',
+                    message: error.message
+                })
+            } 
+        
+            return res.status(500).json({
+                status: 'error',
+                message: error.message
+            })
           });
+
     }
     private initializeRoutes() {
         this.app.use('/api/v1/', routes);

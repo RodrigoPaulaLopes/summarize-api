@@ -21,7 +21,7 @@ export class SummarizeController {
     }
     async create(req: Request, res: Response): Promise<any> {
         const { title, content } = req.body// Placeholder for the actual summarization logic
-        summarizeService.create({ title, content })
+        this.summarizeService.create({ title, content })
         res.status(201).json({ message: "Summarization created successfully" })
     }
 }
