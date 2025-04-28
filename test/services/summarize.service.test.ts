@@ -1,8 +1,9 @@
-import { Any, Repository, UpdateResult } from 'typeorm';
+import {  Repository } from 'typeorm';
 import { SummarizeService } from '../../src/services/Summarize.service';
 import { Summarize } from '../../src/entities/Summarize.entity';
 import ChatGPT from '../../src/api/chatgpt';
 import AppError from '../../src/errors/error';
+
 
 describe('SummarizeService', () => {
     let summarizeService: SummarizeService;
@@ -84,7 +85,20 @@ describe('SummarizeService', () => {
         expect(summarizeRepository.findOneBy).toHaveBeenCalledWith({ id: summarizeId });
         expect(result).toEqual(foundSummarize);
     });
+    
+    it("should throw an error if create a text resume not works", async () => {
+        const newSummarize = {
+            title: "Novo Título",
+            content: "Novo conteúdo do resumo.",
+        };
 
+        chatgpt.summarizeAndImprove.mockResolvedValueOnce("")
+
+        expect(summarizeService.create(newSummarize)).rejects.toThrow(
+            new AppError("Failed to summarize the text", 400)
+        )
+        expect(chatgpt.summarizeAndImprove).toHaveBeenCalledWith(newSummarize.content)
+    });
     it('should throw an error if summarize not found by id', async () => {
         const summarizeId = "72f320d6-c13e-45ee-8479-2ccc25f44d05";
 
@@ -128,6 +142,29 @@ describe('SummarizeService', () => {
         expect(summarizeRepository.findOneBy).toHaveBeenCalledWith({ id: summarizeId });
         expect(summarizeRepository.update).toHaveBeenCalledWith(summarizeId, updateData);
         expect(result).toEqual(updatedSummarize);
+    });
+
+    it("should throw an error if update a text resume not works", async () => {
+        const id = "123e4567-e89b-12d3-a456-426614174000"
+        const newSummarize = {
+            title: "Novo Título",
+            content: "Novo conteúdo do resumo.",
+        };
+
+        const existingSummarize = {
+            id,
+            ...newSummarize,
+            created_at: new Date("2025-04-27T23:22:02.657Z"),
+            updated_at: new Date("2025-04-27T23:22:02.657Z"),
+        }
+        chatgpt.summarizeAndImprove.mockResolvedValueOnce("")
+
+        summarizeRepository.findOneBy.mockResolvedValueOnce(existingSummarize);
+
+        expect(summarizeService.update(id, newSummarize)).rejects.toThrow(
+            new AppError("Failed to summarize the text", 400)
+        )
+        
     });
 
     it('should delete a summarize', async () => {
