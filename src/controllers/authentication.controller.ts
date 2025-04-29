@@ -13,8 +13,14 @@ class AuthenticationController {
         this.userService = new UserService(userRepository)
     }
 
+    async signin(req: Request, res: Response) : Promise<any>{
+        const {email, password} = req.body
 
-    async create(req: Request, res: Response) : Promise<any>{
+        const token = await this.userService.login({email, password})
+
+        return res.status(200).json({accessToken: token})
+    }
+    async signup(req: Request, res: Response) : Promise<any>{
         const {email, password, first_name, last_name} = req.body
 
         const user = await this.userService.create({email, password, first_name, last_name})
