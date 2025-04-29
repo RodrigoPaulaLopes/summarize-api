@@ -5,6 +5,7 @@ import Pagination from "../types/Pagination";
 import AppError from "../errors/error";
 import ChatGPT from "../api/chatgpt";
 import { CreateSummarize } from "../types/Summarize";
+import User from "../entities/User.entity";
 
 export class SummarizeService {
   private summarizeRepository: Repository<Summarize>;
@@ -15,7 +16,7 @@ export class SummarizeService {
     this.chatgpt = gpt;
   }
 
-  public async index(page: number, limit: number): Promise<Pagination> {
+  public async index(user: User,  page: number, limit: number): Promise<Pagination> {
     const [users, total] = await this.summarizeRepository.findAndCount({
       take: limit,
       skip: (page - 1) * limit,

@@ -3,6 +3,7 @@ import { CreateSummarizeTable1745721184412 } from "./migrations/1745721184412-Cr
 import { Summarize } from "../entities/Summarize.entity"
 import { CreateUserTable1745889423991 } from "./migrations/1745889423991-CreateUserTable"
 import User from "../entities/User.entity"
+import { AddUserIdReferenceInSummarizeTable1745929975091 } from "./migrations/1745929975091-AddUserIdReferenceInSummarizeTable"
 
 const AppDataSource = new DataSource({
     type: "postgres",
@@ -12,7 +13,11 @@ const AppDataSource = new DataSource({
     password: process.env.DB_PASSWORD || "test",
     database: process.env.DB_NAME || "summarize_db",
     synchronize: false,
-    migrations: [CreateSummarizeTable1745721184412, CreateUserTable1745889423991],
+    migrations: [
+        CreateSummarizeTable1745721184412, 
+        CreateUserTable1745889423991, 
+        AddUserIdReferenceInSummarizeTable1745929975091
+    ],
     entities: [Summarize, User],
 })
 
