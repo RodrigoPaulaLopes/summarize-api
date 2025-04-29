@@ -59,7 +59,7 @@ export class SummarizeService {
   }
 
   public async show(user: User, id: string): Promise<Summarize> {
-    const summarize = await this.summarizeRepository.findOneBy({ id: id, user: user });
+    const summarize = await this.summarizeRepository.findOneBy({ id: id, user: {id: user.id} });
 
     if (!summarize) {
       throw new AppError("Summarization not found", 404);
@@ -69,18 +69,18 @@ export class SummarizeService {
   }
 
   public async update(id: string, data: CreateSummarize): Promise<Summarize | null> {
-    const summarize = await this.summarizeRepository.findOneBy({ id: id, user: data.user });
+    const summarize = await this.summarizeRepository.findOneBy({ id: id, user: {id: data.user.id} });
 
     if (!summarize) {
       throw new AppError("Summarization not found", 404);
     }
 
-    const response = await this.chatgpt.summarizeAndImprove(data.content)
+    // const response = await this.chatgpt.summarizeAndImprove(data.content)
 
-    if (!response) {
-      throw new AppError("Failed to summarize the text", 400);
-    }
-    data.content = response;
+    // if (!response) {
+    //   throw new AppError("Failed to summarize the text", 400);
+    // }
+    // data.content = response;
 
     await this.summarizeRepository.update(id, data);
 
@@ -88,7 +88,7 @@ export class SummarizeService {
   }
 
   public async delete(user: User, id: string): Promise<void> {
-    const summarize = await this.summarizeRepository.findOneBy({ id: id, user: user });
+    const summarize = await this.summarizeRepository.findOneBy({ id: id, user: {id: user.id} });
 
     if (!summarize) {
       throw new AppError("Summarization not found", 404);

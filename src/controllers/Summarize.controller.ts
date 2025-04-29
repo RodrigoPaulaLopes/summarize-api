@@ -40,8 +40,8 @@ export class SummarizeController {
     async update(req: Request, res: Response): Promise<any> {
         const { id } = req.params
         const { title, content } = req.body
-
-        const summarize = await this.summarizeService.update(id, { title, content })
+        const user = req.user
+        const summarize = await this.summarizeService.update(id, { title, content, user })
 
         return res.status(200).json({ data: summarize, message: `Summarization with id ${id} updated successfully` })
     }
