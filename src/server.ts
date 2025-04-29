@@ -29,7 +29,7 @@ class Server {
     private initializeErrorMiddleware() {
         this.app.use(errors())
         this.app.use((err: Error | AppError, req: any, res: Response, next: NextFunction) => {
-            e(err, req, res, next);
+            errorMiddleware.execute(err, req, res, next);
         });
     }
     private initializeRoutes() {
