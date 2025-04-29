@@ -14,7 +14,7 @@ class AuthenticationController {
     }
 
 
-    async create(req: Request, res: Response) {
+    async create(req: Request, res: Response) : Promise<any>{
         const {email, password, first_name, last_name} = req.body
 
         const user = await this.userService.create({email, password, first_name, last_name})

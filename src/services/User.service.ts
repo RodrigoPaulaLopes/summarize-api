@@ -23,7 +23,6 @@ export class UserService {
         
         password = hashSync(password, 10);
 
-
         const data = {
             email,
             password,
