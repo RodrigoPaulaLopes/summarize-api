@@ -17,7 +17,18 @@ routes.post(
             last_name: Joi.string().empty()
         }),
     }),
-    (req, res) => authenticationController.create(req, res)
+    (req, res) => authenticationController.signup(req, res)
+);
+
+routes.post(
+    '/login',
+    celebrate({
+        [Segments.BODY]: Joi.object().keys({
+            email: Joi.string().email().required(),
+            password: Joi.string().required(),
+        }),
+    }),
+    (req, res) => authenticationController.signin(req, res)
 );
 
 

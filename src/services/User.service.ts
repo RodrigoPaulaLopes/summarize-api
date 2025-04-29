@@ -1,8 +1,9 @@
 import { Repository } from "typeorm";
 import User from "../entities/User.entity";
-import CreateUser from "../types/User";
+import { CreateUser, Login } from "../types/User";
 import AppError from "../errors/error";
-import { hashSync } from "bcrypt";
+import { compare, compareSync, hashSync } from "bcrypt";
+import TokenService from "./token.service";
 
 
 
@@ -15,12 +16,23 @@ export class UserService {
         this.userRepository = repository;
     }
 
-    async create({email, password, first_name, last_name}: CreateUser) {
+    async login({ email, password }: Login) {
+        const user = await this.userRepository.findOne({ where: { email } })
 
-        if(await this.userRepository.findOne({ where: { email } })) {
+        if (!user) throw new AppError("Invalid credentials", 400)
+
+        if (!compareSync(password, user.password)) throw new AppError("Invalid credentials", 400)
+
+        const token = TokenService.generate(user)
+
+        return token
+    }
+    async create({ email, password, first_name, last_name }: CreateUser) {
+
+        if (await this.userRepository.findOne({ where: { email } })) {
             throw new AppError("User already exists", 400);
         }
-        
+
         password = hashSync(password, 10);
 
         const data = {
@@ -29,7 +41,7 @@ export class UserService {
             first_name,
             last_name
         }
-        
+
         const user = this.userRepository.create(data);
         return this.userRepository.save(user);
     }

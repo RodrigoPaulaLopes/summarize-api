@@ -1,11 +1,13 @@
 
 
-class CreateUser {
+export class CreateUser {
     first_name?: string;
     last_name?: string;
     email: string;
     password: string;
 
 }
-
-export default CreateUser;
+export class Login {
+    email: string;
+    password: string;
+}
