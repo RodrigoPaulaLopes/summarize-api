@@ -1,10 +1,11 @@
-import express, { NextFunction, Request, Response } from 'express';
+import express, { NextFunction, Response } from 'express';
 import AppDataSource from './database/data-source';
 import 'reflect-metadata';
 import routes from './routes/routes';
-import { errors, isCelebrateError } from 'celebrate';
-import AppError from './errors/error';
+import { errors} from 'celebrate';
 import dotenv from 'dotenv'
+import errorMiddleware from './middleware/error.middleware';
+import AppError from './errors/error';
 
 dotenv.config();
 
@@ -27,21 +28,8 @@ class Server {
 
     private initializeErrorMiddleware() {
         this.app.use(errors())
-        this.app.use((error: Error | AppError, req: Request, res: Response, next: NextFunction) => {
-
-
-
-            if (error instanceof AppError) {
-                return res.status(error.statusCode).json({
-                    status: 'error',
-                    message: error.message,
-                });
-            }
-
-            return res.status(500).json({
-                status: 'error',
-                message: error.message,
-            });
+        this.app.use((err: Error | AppError, req: any, res: Response, next: NextFunction) => {
+            e(err, req, res, next);
         });
     }
     private initializeRoutes() {
