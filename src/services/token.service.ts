@@ -15,10 +15,10 @@ class TokenService {
         })
     }
 
-    public static validate(token: string) : string | jwt.JwtPayload{
+    public static validate(token: string) : jwt.JwtPayload{
         return jwt.verify(token, process.env.SECRET as string, {
             issuer: 'Summarize API',
-        })
+        }) as jwt.JwtPayload
     }
 }
 
