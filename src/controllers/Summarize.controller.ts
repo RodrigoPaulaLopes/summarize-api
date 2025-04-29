@@ -1,11 +1,7 @@
 import { Request, Response } from "express";
 import { SummarizeService } from "../services/Summarize.service";
-import { Summarize } from "../entities/Summarize.entity";
-import AppError from "../errors/error";
 import SummarizeRepository from "../repositories/Summarize.repository";
 import ChatGPT from "../api/chatgpt";
-
-
 
 
 export class SummarizeController {
