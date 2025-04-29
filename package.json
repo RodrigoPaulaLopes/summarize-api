@@ -10,15 +10,19 @@
     "test": "jest --watchAll=true --detectOpenHandles --forceExit"
   },
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "celebrate": "^15.0.3",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
     "openai": "^4.96.0"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/dotenv": "^8.2.3",
     "@types/express": "^5.0.1",
     "@types/jest": "^29.5.14",
+    "@types/jsonwebtoken": "^9.0.9",
     "@types/node": "^22.15.2",
     "jest": "^29.7.0",
     "pg": "^8.15.6",
