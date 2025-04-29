@@ -48,7 +48,7 @@ export class SummarizeService {
     const response = await this.chatgpt.summarizeAndImprove(data.content)
 
     if (!response) {
-      throw new AppError("Failed to summarize the text", 400);
+       throw new AppError("Failed to summarize the text", 400);
     }
 
     data.content = response;
@@ -72,15 +72,17 @@ export class SummarizeService {
     const summarize = await this.summarizeRepository.findOneBy({ id: id, user: {id: data.user.id} });
 
     if (!summarize) {
-      throw new AppError("Summarization not found", 404);
+       throw new AppError("Summarization not found", 404);
     }
+    console.log('hasdhhasd');
+    
 
-    // const response = await this.chatgpt.summarizeAndImprove(data.content)
+    const response = await this.chatgpt.summarizeAndImprove(data.content)
 
-    // if (!response) {
-    //   throw new AppError("Failed to summarize the text", 400);
-    // }
-    // data.content = response;
+    if (!response) {
+       throw new AppError("Failed to summarize the text", 400);
+    }
+    data.content = response;
 
     await this.summarizeRepository.update(id, data);
 
