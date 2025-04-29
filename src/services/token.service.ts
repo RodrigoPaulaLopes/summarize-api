@@ -6,7 +6,7 @@ dotenv.config()
 class TokenService {
 
 
-    public static generate(user: User): string {
+    public static generate(user: User): string {)
         return jwt.sign({
             id: user.id,
             email: user.email
