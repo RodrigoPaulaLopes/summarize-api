@@ -6,6 +6,7 @@ const routes: Router = Router();
 const summarizeController = new SummarizeController();
 
 routes.get('/', (req, res) => summarizeController.index(req, res));
+
 routes.get('/:id', (req, res) => summarizeController.show(req, res));
 routes.delete('/:id', (req, res) => summarizeController.delete(req, res));
 
