@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import User from "./User.entity";
 
 @Entity('summarize')
 export class Summarize {
@@ -10,6 +11,10 @@ export class Summarize {
     title: string
     @Column()
     content: string
+
+
+    @ManyToOne(() => User, user => user.summarize)
+    user: User
 
     @CreateDateColumn()
     created_at: Date

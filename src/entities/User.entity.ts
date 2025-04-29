@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Summarize } from "./Summarize.entity";
 
 
 
@@ -18,6 +19,9 @@ class User {
 
     @Column({ type: 'varchar', length: 255, nullable: false })
     password: string;
+
+    @OneToMany(() => Summarize, (summarize) => summarize.users)
+    summarizes: Summarize[]
 
     @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     created_at: Date;

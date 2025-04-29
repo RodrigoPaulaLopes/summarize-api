@@ -18,6 +18,11 @@ export class SummarizeService {
 
   public async index(user: User,  page: number, limit: number): Promise<Pagination> {
     const [users, total] = await this.summarizeRepository.findAndCount({
+      where: {
+        user: {
+          id: user.id
+        }
+      },
       take: limit,
       skip: (page - 1) * limit,
       order: {
