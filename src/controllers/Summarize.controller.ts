@@ -33,8 +33,8 @@ export class SummarizeController {
 
     async show(req: Request, res: Response): Promise<any> {
         const { id } = req.params
-        const summarize = await this.summarizeService.show(id)
-       
+        const user = req.user
+        const summarize = await this.summarizeService.show(user, id)
         return res.status(200).json({ data: summarize, message: `Summarization with id ${id} retrieved successfully` })
     }
     async update(req: Request, res: Response): Promise<any> {
@@ -48,8 +48,8 @@ export class SummarizeController {
 
     async delete(req: Request, res: Response): Promise<any> {
         const { id } = req.params
-        const summarize = await this.summarizeService.delete(id)
-
+        const user = req.user
+        const summarize = await this.summarizeService.delete(user, id)
         return res.status(200).json({ data: summarize, message: `Summarization with id ${id} deleted successfully` })
     }
 }

@@ -16,7 +16,7 @@ export class SummarizeService {
     this.chatgpt = gpt;
   }
 
-  public async index(user: User,  page: number, limit: number): Promise<Pagination> {
+  public async index(user: User, page: number, limit: number): Promise<Pagination> {
     const [users, total] = await this.summarizeRepository.findAndCount({
       where: {
         user: {
@@ -45,21 +45,21 @@ export class SummarizeService {
   }
 
   public async create(data: CreateSummarize): Promise<any> {
-    // const response = await this.chatgpt.summarizeAndImprove(data.content)
+    const response = await this.chatgpt.summarizeAndImprove(data.content)
 
-    // if (!response) {
-    //   throw new AppError("Failed to summarize the text", 400);
-    // }
+    if (!response) {
+      throw new AppError("Failed to summarize the text", 400);
+    }
 
-    // data.content = response;
+    data.content = response;
 
-    // Placeholder for the actual summarization logic
+
     const summarize = this.summarizeRepository.create(data);
     return await this.summarizeRepository.save(summarize)
   }
 
-  public async show(id: string): Promise<Summarize> {
-    const summarize = await this.summarizeRepository.findOneBy({ id });
+  public async show(user: User, id: string): Promise<Summarize> {
+    const summarize = await this.summarizeRepository.findOneBy({ id: id, user: user });
 
     if (!summarize) {
       throw new AppError("Summarization not found", 404);
@@ -69,7 +69,7 @@ export class SummarizeService {
   }
 
   public async update(id: string, data: CreateSummarize): Promise<Summarize | null> {
-    const summarize = await this.summarizeRepository.findOneBy({ id });
+    const summarize = await this.summarizeRepository.findOneBy({ id: id, user: data.user });
 
     if (!summarize) {
       throw new AppError("Summarization not found", 404);
@@ -87,8 +87,8 @@ export class SummarizeService {
     return await this.summarizeRepository.findOneBy({ id });
   }
 
-  public async delete(id: string): Promise<void> {
-    const summarize = await this.summarizeRepository.findOneBy({ id });
+  public async delete(user: User, id: string): Promise<void> {
+    const summarize = await this.summarizeRepository.findOneBy({ id: id, user: user });
 
     if (!summarize) {
       throw new AppError("Summarization not found", 404);
