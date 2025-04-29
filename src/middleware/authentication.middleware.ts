@@ -29,8 +29,8 @@ class AuthenticationMiddleware {
         try {
             const payload = TokenService.validate(token);
             const user = await this.userService.show(payload.id)
-            console.log(user)
-            // req.user = user
+
+            req.user = user
             next();
         } catch (error) {
             return next(new AppError("Invalid token" + error, 401));

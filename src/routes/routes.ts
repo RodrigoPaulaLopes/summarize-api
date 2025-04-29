@@ -8,6 +8,6 @@ const routes: Router = Router();
 const authentication = new AuthenticationMiddleware()
 
 routes.use('/auth', authRoutes)
-routes.use('/summarize', authentication.execute, summarizeRoutes)
+routes.use('/summarize', (req, res, next) => authentication.execute(req, res, next), summarizeRoutes)
 
 export default routes;
