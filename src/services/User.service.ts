@@ -46,4 +46,11 @@ export class UserService {
         return this.userRepository.save(user);
     }
 
+    async show(id: string) {
+        const user = await this.userRepository.findOne({ where: { id } })
+        if (!user) throw new AppError("User not found!", 404)
+
+        return user
+    }
+
 }

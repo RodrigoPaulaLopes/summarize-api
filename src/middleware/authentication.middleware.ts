@@ -12,7 +12,7 @@ class AuthenticationMiddleware {
     constructor() {
         this.userService = new UserService(userRepository)
     }
-    public execute(req: Request, res: Response, next: NextFunction) {
+    public async execute(req: Request, res: Response, next: NextFunction) {
 
         const header = req.headers.authorization;
 
@@ -28,7 +28,8 @@ class AuthenticationMiddleware {
 
         try {
             const payload = TokenService.validate(token);
-
+            const user = await this.userService.show(payload.id)
+            req.user = user
             next();
         } catch (error) {
             return next(new AppError("Invalid token", 401));
