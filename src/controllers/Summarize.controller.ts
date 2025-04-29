@@ -24,15 +24,17 @@ export class SummarizeController {
         return res.status(200).json({ data: summarize, message: "" })
     }
     async create(req: Request, res: Response): Promise<any> {
-        const { title, content } = req.body// Placeholder for the actual summarization logic
-        const data = await this.summarizeService.create({ title, content })
+        const { title, content } = req.body
+        const user = req.user
+        // ceholder for the actual summarization logic
+        const data = await this.summarizeService.create( { title, content, user })
         return res.status(201).json({ data, message: "Summarization created successfully" })
     }
 
     async show(req: Request, res: Response): Promise<any> {
         const { id } = req.params
         const summarize = await this.summarizeService.show(id)
-
+       
         return res.status(200).json({ data: summarize, message: `Summarization with id ${id} retrieved successfully` })
     }
     async update(req: Request, res: Response): Promise<any> {

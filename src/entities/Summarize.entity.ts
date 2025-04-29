@@ -13,7 +13,7 @@ export class Summarize {
     content: string
 
 
-    @ManyToOne(() => User, user => user.summarize)
+    @ManyToOne(() => User, user => user.summarizes)
     user: User
 
     @CreateDateColumn()

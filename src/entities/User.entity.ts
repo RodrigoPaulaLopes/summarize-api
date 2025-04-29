@@ -20,7 +20,7 @@ class User {
     @Column({ type: 'varchar', length: 255, nullable: false })
     password: string;
 
-    @OneToMany(() => Summarize, (summarize) => summarize.users)
+    @OneToMany(() => Summarize, (summarize) => summarize.user)
     summarizes: Summarize[]
 
     @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
